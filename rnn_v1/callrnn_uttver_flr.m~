@@ -1,0 +1,61 @@
+clear all; close all; clc;
+
+% give an experiment name and this will create a directory which will contain final data and results and error files
+expname = 'exp1';
+expdir = strcat('../',expname,'/');
+
+% Step1: make data 
+makedata_rnn
+
+% Step2: Initialization of RNN params
+Nh = 600
+h_0 = gpuArray(zeros(Nh,1)); % initial state of hidden units
+h_p = h_0;
+
+% rnn learning rule params
+cfn = @nnls; % use square-error loss function
+eta_vec = [1e-4 1e-5 1e-6];
+mf_max_vec = [0.98 0.9 0];
+mf = [0.9];
+nepochs = 20;
+gamma = 1;
+a_tanh = gpuArray(single(1.7159));
+a_tanh_sqr = gpuArray(single(a_tanh.^2));
+b_tanh = gpuArray(single(2/3));
+bby2a = gpuArray(single(b_tanh/(2*a_tanh)));
+
+% write weight and error files here ...
+wtdir = strcat(expdir,'wt/');
+errdir = strcat(expdir,'err/');
+mkdir(wtdir);
+mkdir(errdir);
+
+opts.tol = 1e-1; 
+for rhoi = 1:length(eta_vec)
+    eta = eta_vec(rhoi)
+    for mfi = 1:length(mf_max_vec)
+        mf_max = mf_max_vec(mfi)
+        
+        sparse_wt_init
+        % generate the mask for recurrent weights
+        mask = (W~=0);
+        
+        % early stopping params (Theano DeepLearningTutorials)
+        patience = 10000;
+        patience_inc = 2;
+        imp_thresh = 0.995;
+        val_freq = min(1,patience/2);
+        best_val_loss = inf;
+        best_iter = 0;
+        num_up = 0;
+        
+        % open error text file
+        arch_name = strcat(arch_name,'_mfmax_eta_mf_',num2str(mf_max),'_',num2str(eta),num2str(mf),'_RNN_sparseinit');
+        fid = fopen(strcat(errdir,'err_',arch_name,'.err'),'w');
+        valerr = gpuArray(zeros(1,nepochs));
+        
+        trnrnn_uttver_flrnag
+        fclose(fid);
+    end
+    
+end

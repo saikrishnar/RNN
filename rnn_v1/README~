@@ -1,0 +1,61 @@
+Note1 : This code currently works for Regression problems only !!!!
+
+Nonlinearities supported : (1) tanh 
+
+cost functions supported : (1) squared error
+
+Routine Description : ( Almost in the order of flow of callrnn_uttver_flr.m script)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+(1) makedata_rnn : This routine loads train data, test data and validation data. Each is a .matfile containing input , output as matrices and sequence length vector 
+
+To run makedata_rnn the data must be in the following format.
+
+Example : suppose input dimension is 2 with 2 examples and output dimension is 1  and 2,3 are sequence lengths of each example
+
+Input matrix
+1 0 
+1 0
+0 1
+0 1
+0 1
+
+Ouput matrix 
+1
+1
+0
+0
+0
+
+Sequence vector : this indicates length of each sequence
+[2 3]
+
+Note2 : While "saving" data i.e "train.mat", "val.mat" and "test.mat" use the following notation for Input, Output and sequence length vectors 
+
+For example when preparing training data
+Put the Input matrix in varaible 'X' and Output matrix in variable 'Y' and sequence vector in variable 'sv' and use matlab command "save('train.mat','X','Y','sv','-v7.3');"
+
+Do the same for preparing "test.mat" and "val.mat"
+
+Note3 : If you dont have separate testing and validation data you can use same validation/test data for the other by making small changes makedata_rnn 
+
+Once data is set in the above format you are almost done and can run "callrnn_uttver_flr.m" script
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(2) sparse_wt_init : This routine is more or less self-explanatory ... 
+
+Note4 : If you intend not to do sparse initialization then comment the line 47 and then run as usual !!!!
+
+Note5 : You can change the scale/standard deviation of the random normal distribution default is set to 0.1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+(3) trnrnn_uttver_flrnag : This routine take care of the training part  
+
+This prints out error every 25th update , you can set this number little higher or lower depending on the experiment. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! **********************   Done  ******************* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
