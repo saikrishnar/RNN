@@ -7,8 +7,8 @@ train_batchdata = gpuArray(single(X));
 tmvnf = 1;
 % Input file preprocessing
 if tmvnf
-    m = mean(data);
-    v = std(data);
+    m = mean(X);
+    v = std(X);
     train_batchdata = bsxfun(@minus,train_batchdata,m);
     train_batchdata = bsxfun(@rdivide,train_batchdata,v+1e-5);
     save(strcat(datadir,'mvn.mat'),'m','v');
